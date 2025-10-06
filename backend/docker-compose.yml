@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:15
+    container_name: shorrtlink-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  backend:
+    build: .
+    container_name: shorrtlink-backend
+    env_file: .env
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    container_name: shorrtlink-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  db-data:

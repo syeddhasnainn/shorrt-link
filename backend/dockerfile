@@ -1,0 +1,21 @@
+# Use official Bun runtime
+FROM oven/bun:1
+
+# Set working directory inside container
+WORKDIR /app
+
+# Copy dependency files first (for caching)
+COPY package.json bun.lock ./
+
+# Install only production dependencies
+RUN bun install
+
+# Copy the rest of your app
+COPY . .
+
+
+# Expose container port
+EXPOSE 3001
+
+# Run the app
+CMD ["bun", "start"]
