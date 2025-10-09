@@ -25,5 +25,5 @@ jobs:
             cd backend
 
             # Rebuild and restart containers
-            docker compose build
-            docker compose up -d
+            docker compose down
+            docker compose up -d --build
