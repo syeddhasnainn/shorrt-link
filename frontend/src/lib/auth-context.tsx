@@ -6,7 +6,6 @@ import {
   type ReactNode,
 } from 'react'
 import { useLocation, useNavigate } from '@tanstack/react-router'
-import { jwtDecode } from 'jwt-decode'
 
 type AuthContextType = {
   jwt: string | null

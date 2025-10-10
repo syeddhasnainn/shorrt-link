@@ -1,16 +1,10 @@
 import { createFileRoute, Link, redirect } from '@tanstack/react-router'
 import { useState } from 'react'
-import { useEffect } from 'react'
 import { Button } from '../components/ui/button'
 import { Input } from '../components/ui/input'
 import { ClickIcon, CopyIcon, GotoIcon, SearchIcon } from '@/lib/icons'
 import { jwtDecode } from 'jwt-decode'
-import {
-  QueryClient,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '@/lib/auth-context'
 
 export const Route = createFileRoute('/dashboard')({
