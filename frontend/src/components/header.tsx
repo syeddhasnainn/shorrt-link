@@ -1,8 +1,14 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { Button } from './ui/button'
-
+import { useLocation } from '@tanstack/react-router'
+import { useAuth } from '@/lib/auth-context'
 export const Header = () => {
-  const jwt = localStorage.getItem('shortlink_jwt')
+  const location = useLocation()
+  const { jwt, setJwt } = useAuth()
+  const navigate = useNavigate()
+
+  if (location.pathname === '/login' || location.pathname === '/signup')
+    return null
 
   if (jwt) {
     return (
@@ -10,9 +16,28 @@ export const Header = () => {
         <Link to="/" className="flex-1 font-semibold text-xl cursor-pointer">
           Shorrtl.ink
         </Link>
-        <Link to="/dashboard">
-          <Button className="cursor-pointer">Go to Dashboard</Button>
-        </Link>
+        {location.pathname === '/dashboard' ||
+        location.pathname.includes('analytics') ? (
+          <Button
+            onClick={() => {
+              localStorage.removeItem('shortlink_jwt')
+              setJwt(null)
+              navigate({ to: '/login' })
+            }}
+            className="cursor-pointer"
+          >
+            Signout
+          </Button>
+        ) : (
+          <Button
+            onClick={() => {
+              navigate({ to: '/dashboard' })
+            }}
+            className="cursor-pointer"
+          >
+            Go to Dashboard
+          </Button>
+        )}
       </div>
     )
   }

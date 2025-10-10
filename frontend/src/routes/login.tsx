@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import { useAuth } from '@/lib/auth-context'
 
 export const Route = createFileRoute('/login')({
   component: RouteComponent,
@@ -12,7 +13,7 @@ function RouteComponent() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
-
+  const { setJwt } = useAuth()
   const handleLogin = async () => {
     try {
       const response = await fetch(
@@ -25,6 +26,7 @@ function RouteComponent() {
       const data = await response.json()
       if (response.status === 200) {
         localStorage.setItem('shortlink_jwt', data.jwt)
+        setJwt(data.jwt)
         navigate({ to: '/dashboard' })
       }
     } catch (error) {
@@ -36,24 +38,35 @@ function RouteComponent() {
   }
 
   return (
-    <div className="absolute inset-0 min-h-screen flex flex-col gap-4 items-center justify-center">
+    <div className=" flex flex-col gap-4 items-center justify-center min-h-screen absolute inset-0">
       <img src="/logo.png" alt="Logo" className="w-14 h-14" />
 
       <h2 className="text-sm">Sign in to your account to continue</h2>
       <div className="flex flex-col gap-4 w-full max-w-sm">
         <div className="flex flex-col gap-2">
-          <Input
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <Input
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <form
+            className="space-y-2"
+            onSubmit={(e) => {
+              e.preventDefault()
+              handleLogin()
+            }}
+            action=""
+          >
+            <Input
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Input
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button className="w-full" onClick={handleLogin}>
+              Sign in
+            </Button>
+          </form>
         </div>
-        <Button onClick={handleLogin}>Sign in</Button>
       </div>
 
       <div className="text-sm text-gray-500">

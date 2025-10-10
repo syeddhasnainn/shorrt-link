@@ -7,6 +7,7 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import type { QueryClient } from '@tanstack/react-query'
 import { Header } from '@/components/header'
 import { Toaster } from '@/components/ui/sonner'
+import { AuthProvider } from '@/lib/auth-context'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -14,24 +15,26 @@ interface MyRouterContext {
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => (
-    <div className="min-h-screen max-w-5xl mx-auto p-4 figtree">
-      <Header />
-      <Outlet />
+    <AuthProvider>
+      <div className="min-h-screen max-w-5xl mx-auto p-4 figtree">
+        <Header />
+        <Outlet />
 
-      <TanStackDevtools
-        config={{
-          position: 'bottom-right',
-        }}
-        plugins={[
-          {
-            name: 'Tanstack Router',
-            render: <TanStackRouterDevtoolsPanel />,
-          },
-          TanStackQueryDevtools,
-        ]}
-      />
+        <TanStackDevtools
+          config={{
+            position: 'bottom-right',
+          }}
+          plugins={[
+            {
+              name: 'Tanstack Router',
+              render: <TanStackRouterDevtoolsPanel />,
+            },
+            TanStackQueryDevtools,
+          ]}
+        />
 
-      <Toaster />
-    </div>
+        <Toaster />
+      </div>
+    </AuthProvider>
   ),
 })
